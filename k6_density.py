@@ -288,6 +288,7 @@ st.pyplot(fig)
 
 st.write(f"単身世帯率と10点以上の割合の相関係数: {x.corr(y):.3f}")
 
+# 相関係数行列を表示
 st.title("人口密度、単身世帯率、10点以上の割合の相関係数")
 cols = ["人口密度", "単身世帯率", "10点以上の割合"]
 correlation_matrix = merged_df[cols].astype(float).corr()
