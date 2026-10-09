@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 # =========================
-# 1. CSV読み込み
+# CSV読み込み
 # =========================
 
 # 6行目から読み込む
@@ -293,3 +293,22 @@ st.title("人口密度、単身世帯率、10点以上の割合の相関係数")
 cols = ["人口密度", "単身世帯率", "10点以上の割合"]
 correlation_matrix = merged_df[cols].astype(float).corr()
 st.write(correlation_matrix)
+
+# =========================
+# 偏相関係数の計算
+# =========================
+r_xy = merged_df["人口密度"].astype(float).corr(merged_df["10点以上の割合"].astype(float))
+r_xz = merged_df["人口密度"].astype(float).corr(merged_df["単身世帯率"].astype(float))
+r_yz = merged_df["10点以上の割合"].astype(float).corr(merged_df["単身世帯率"].astype(float))
+
+# 偏相関係数の計算
+partial_correlation = (r_xy - r_xz * r_yz) / np.sqrt((1 - r_xz**2) * (1 - r_yz**2))
+
+st.title("偏相関係数の計算結果")
+st.write(f"人口密度と10点以上の割合の偏相関係数（単身世帯率を制御）: {partial_correlation:.3f}")
+
+# 人口密度とK6の相関係数とp値を計算
+from scipy.stats import pearsonr
+r, p = pearsonr(merged_df["人口密度"].astype(float), merged_df["10点以上の割合"].astype(float))
+st.write(f"人口密度と10点以上の割合の相関係数: {r:.3f}")
+st.write(f"p値: {p:.3f}")
